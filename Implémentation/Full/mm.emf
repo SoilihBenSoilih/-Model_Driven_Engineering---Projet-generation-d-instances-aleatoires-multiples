@@ -1,0 +1,29 @@
+@namespace(uri="MindMap", prefix="MindMap")
+package MindMap;
+
+class MindMap {
+  val Marker[*] markers;
+  val CentralTopic[1] topic;
+  !unique !ordered id attr String title;
+}
+
+class Marker {
+  !unique !ordered id attr String symbol;
+}
+
+class SubTopic extends Topic {
+  val SubTopic[*] subsubtopics;
+}
+
+class MainTopic extends Topic {
+  val SubTopic[*] subtopics;
+}
+
+class CentralTopic extends Topic {
+  val MainTopic[*] maintopics;
+}
+
+abstract class Topic {
+  ref Marker marker;
+  !unique !ordered id attr String name;
+}

@@ -1,0 +1,93 @@
+/**************************Explications**********************************
+Définition du nombre d'instances voulu par l'utilisateur. 
+Si on veut par exemple plus de 20 instances ou moins, il suffit de 
+changer cette variable. Mais il faut par contre tenir compte de la 
+capacité de notre processeur parce que, plus les instances sont nombreuses, plus
+Eclipse sera susceptible de ne pas répondre, donc ici, c'est vraiment
+par rapport à la machine et je ne peux pas définir comment savoir.
+****************************************************************************/
+
+var nombre_instances : Integer = 20;
+
+/**************************Explications**********************************
+Notre première boucle for ici est utilisé pour définir le nombre 
+d'instances de mindmap par rapport au nombre d'instances qu'on a demandé 
+au début dans la variable.
+****************************************************************************/	
+
+
+for (j in 1.to(nombre_instances)) { 
+		
+/**************************Explications**********************************
+On a nommé le nom de la variable du modèle mindmap "test"
+dans la configuration, il faudra l'utiliser, sinon, il n'y aura pas de lien 
+entre le fichier ecore et notre fichier eol et donc évidemment, une erreur
+sera retournée parce qu'il ne retrouvera pas les classes qu'on veut instancier.
+****************************************************************************/		
+		
+		var test = new test!MindMap;
+
+		test.title = "mindmap" + j;
+		
+/**************************Explications**********************************
+Ici on définit un ensemble sur lequel on va agir pour 
+prendre un nombre aléatoire qui sera utilisé pour constituer  
+le nombre de maintopic possible et le de subtopic
+ici, j'ai définit 15 comme étant le maxium de maintopics et de subtopics
+possibles pour ne pas faire beaucoup, mais sinon, on peut toujours changer 
+le 15 par un autre nombre plus grand au besoin.
+****************************************************************************/
+		var alea : Sequence = Sequence {0..15};
+
+/**************************Explications**********************************
+Dans notre boucle for, la première, vu qu'un mindmap est composé d'un seul
+central topic, on peut le définir ici.
+La ligne de code "test.topic = ct;" est là pour faire le lien entre un 
+la classe mindmap qui est notre classe racine avec un central topic.
+"topic" ici est le nom de la relation entre un mindmap et un centraltopic
+dans notre modèle Ecore.
+****************************************************************************/
+	
+		var ct : test!CentralTopic = new test!CentralTopic;
+		ct.name = "centralTopic";
+		test.topic = ct;
+
+/**************************Explications**********************************
+Ici on met une boucle for dans la première boucle for pour définir des maintopics 
+parce que les maintopics sont contenus dans les central topics et ainsi, chaque
+central topic aura plusieurs maintopics selon le nombre pris dans l'ensemble
+"alea". A chaque tour de boucle, on met le "ct.maintopics.add(mt);"
+pour lier le maintopic au central topic.
+La même logique s'applique pour les subtopics
+****************************************************************************/
+	    		 for (k in 1.to(alea.random())) { 
+					var mt : test!MainTopic = new test!MainTopic;
+    				mt.name = "mainTopic" + " " + k;
+    				ct.maintopics.add(mt);
+    				
+    					for (k in 1.to(alea.random())) { 
+							var st : test!SubTopic = new test!SubTopic;
+    						st.name = "subTopic" + " " + k;
+    						mt.subtopics.add(st);
+    					}
+    		
+				}
+				
+/**************************Explications**********************************
+Ici on définit un ensemble ordonné dans lequel on met chaque mindmap
+généré à chaque tour de la première boucle for.
+On a choisi celui là parce que dans un orderedSet, non seulement 
+l'ensemble est ordonné, mais il ne peut contenir deux fois la même chose 
+comme les ensembles en général en mathématiques. 
+La dernière ligne de code, je l'ai utilisé pour voir ce que contient notre 
+ensemble dans la console, on peut l'enlever.
+****************************************************************************/
+		
+		var ens : OrderedSet;
+		ens.add(test);
+		ens.println();
+	
+}
+	
+
+
